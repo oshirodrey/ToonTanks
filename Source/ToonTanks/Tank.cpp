@@ -126,11 +126,11 @@ void ATank::Tick(float DeltaTime)
     }
     else if (CurrentMoveInput < 0 && CurrentTurnInput > 0)
     {
-        Back3->SetVisibility(true);
+        Back2->SetVisibility(true);
     }
     else if (CurrentMoveInput < 0 && CurrentTurnInput < 0)
     {
-        Back2->SetVisibility(true);
+        Back3->SetVisibility(true);
     }
     else if (CurrentMoveInput < 0 && CurrentTurnInput == 0)
     {
@@ -166,8 +166,19 @@ void ATank::Turn(float Value)
 {   
     CurrentTurnInput = Value; // Store the current turn input value
     FVector DeltaRotation = FVector::ZeroVector;
-    DeltaRotation.Y= Value * TurnSpeed * GetWorld()->GetDeltaSeconds(); // Turn left/right based on input   
-    FRotator NewRotation = FRotator(0.0f, DeltaRotation.Y, 0.0f); // Create a new rotation based on the input
+    DeltaRotation.Y= Value * TurnSpeed * GetWorld()->GetDeltaSeconds(); // Turn left/right based on input  
+    FRotator NewRotation = FRotator(0.0f, 0.0f, 0.0f); // Create a new rotation based on the input
+
+    //Just to make sure the tank turns in the right direction
+    if(CurrentMoveInput <0 )
+    {
+        NewRotation = FRotator(0.0f, -DeltaRotation.Y, 0.0f); 
+
+    }
+    else
+    {    
+        NewRotation = FRotator(0.0f, DeltaRotation.Y, 0.0f); 
+    }
     AddActorLocalRotation(NewRotation, true); // Apply rotation to the tank 
 
 }
