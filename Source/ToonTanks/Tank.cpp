@@ -125,6 +125,7 @@ void ATank::Tick(float DeltaTime)
 
         // Draw a debug sphere at the hit location
         DrawDebugSphere(GetWorld(), HitLocation, 50.f, 12, FColor::Red, false, -1.f);
+        RotateTurret(HitLocation); // Rotate the turret towards the hit location
     }
 
     

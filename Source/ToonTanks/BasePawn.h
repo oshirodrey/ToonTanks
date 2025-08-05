@@ -33,6 +33,7 @@ private:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+protected:
+	void RotateTurret(FVector LookAtTarget);
 	
 };

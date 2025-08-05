@@ -28,3 +28,16 @@ void ABasePawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+void ABasePawn::RotateTurret(FVector LookAtTarget)
+{
+	if (!TurretMesh) return;
+
+	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
+	FRotator LookAtRotation = FRotator(0.0f, ToTarget.Rotation().Yaw, 0.0f); // Get the rotation towards the target
+	TurretMesh->SetWorldRotation(FMath::RInterpTo(TurretMesh->GetComponentRotation(),
+	 	LookAtRotation, 
+	 	GetWorld()->GetDeltaSeconds(), 
+	 	3.0f)
+	); // Smoothly rotate the turret towards the target
+}
