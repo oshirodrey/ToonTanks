@@ -15,9 +15,7 @@ public:
 	// Sets default values for this pawn's properties
 	ABasePawn(); // Constructor declaration
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, meta= (AllowPrivateAccess = "true"),Category = "Components")
 	class UCapsuleComponent* CapsuleComp;

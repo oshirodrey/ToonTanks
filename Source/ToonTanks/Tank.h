@@ -17,6 +17,9 @@ protected:
     float CurrentMoveInput = 0.f;
     float CurrentTurnInput = 0.f;
 	TArray<UStaticMeshComponent*> TankMeshComponents;
+	
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 private:
 
@@ -29,7 +32,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta= (AllowPrivateAccess = "true"), Category = "Tank Properties")
 		float MovementSpeed = 1000.0f; // Speed of the tank movement	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta= (AllowPrivateAccess = "true"), Category = "Tank Properties")
-		float TurnSpeed = 200.0f; // Speed of the tank turning
+		float TurnRate = 200.0f; // Speed of the tank turning
 
 	//Plans (object) for the tank
 		UPROPERTY(VisibleAnywhere,BlueprintReadWrite, meta= (AllowPrivateAccess="true"), Category = "Components")
@@ -54,6 +57,9 @@ private:
 	// Functions to handle movement and turning
 	void Move(float Value);
 	void Turn(float Value); 
+	void SetTankArrowsVisibility();
+	/////////
+	APlayerController* PlayerControllerRef;
 public:
 	ATank(); // Decalration of the constructor
 	

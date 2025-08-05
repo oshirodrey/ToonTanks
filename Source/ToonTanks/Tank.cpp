@@ -96,11 +96,72 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
     
 
 }
+// Called when the game starts or when spawned
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+    PlayerControllerRef = Cast<APlayerController>(GetController());
+    
+	
+}
+
 
 void ATank::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    // Call the function to set the visibility of the tank arrows
+    SetTankArrowsVisibility();
+    //Create a red sphere at the cursor's location 
+    if (PlayerControllerRef)
+    {
+        FVector HitLocation;
+        FHitResult HitResult;
+        PlayerControllerRef->GetHitResultUnderCursor(
+            ECollisionChannel::ECC_Visibility, 
+            false, 
+            HitResult);
+        HitLocation = HitResult.ImpactPoint;
+
+        // Draw a debug sphere at the hit location
+        DrawDebugSphere(GetWorld(), HitLocation, 50.f, 12, FColor::Red, false, -1.f);
+    }
+
+    
+}
+
+void ATank::Move(float Value)
+{   
+    CurrentMoveInput = Value; // Store the current move input value
+    FVector DeltaLocation = FVector::ZeroVector;
+    //DeltaLocation.X = Value * MovementSpeed * GetWorld()->GetDeltaSeconds(); // Move forward/backward based on input
+    DeltaLocation.X = Value * MovementSpeed * UGameplayStatics::GetWorldDeltaSeconds(this); // 2 way of getting delta seconds
+    AddActorLocalOffset(DeltaLocation, true); // Move forward/backward based on input
+
+    
+}
+
+void ATank::Turn(float Value)
+{   
+    CurrentTurnInput = Value; // Store the current turn input value
+    FRotator NewRotation = FRotator(0.0f, 0.0f, 0.0f); // Create a new rotation based on the input
+
+    //Just to make sure the tank turns in the right direction
+    if(CurrentMoveInput <0 )
+    {
+        NewRotation.Yaw =   -( Value * TurnRate * GetWorld()->GetDeltaSeconds()); // Turn left/right based on input  
+
+
+    }
+    else
+    {    
+        NewRotation.Yaw =   ( Value * TurnRate * GetWorld()->GetDeltaSeconds());
+    }
+    AddActorLocalRotation(NewRotation, true); // Apply rotation to the tank 
+
+}
+void ATank::SetTankArrowsVisibility()
+{
     for (UStaticMeshComponent* MeshComponent : TankMeshComponents)
     {
         if (MeshComponent->IsVisible())
@@ -150,36 +211,3 @@ void ATank::Tick(float DeltaTime)
     CurrentMoveInput = 0.f;
     CurrentTurnInput = 0.f;
 }
-
-void ATank::Move(float Value)
-{   
-    CurrentMoveInput = Value; // Store the current move input value
-    FVector DeltaLocation = FVector::ZeroVector;
-    //DeltaLocation.X = Value * MovementSpeed * GetWorld()->GetDeltaSeconds(); // Move forward/backward based on input
-    DeltaLocation.X = Value * MovementSpeed * UGameplayStatics::GetWorldDeltaSeconds(this); // 2 way of getting delta seconds
-    AddActorLocalOffset(DeltaLocation, true); // Move forward/backward based on input
-
-    
-}
-
-void ATank::Turn(float Value)
-{   
-    CurrentTurnInput = Value; // Store the current turn input value
-    FVector DeltaRotation = FVector::ZeroVector;
-    DeltaRotation.Y= Value * TurnSpeed * GetWorld()->GetDeltaSeconds(); // Turn left/right based on input  
-    FRotator NewRotation = FRotator(0.0f, 0.0f, 0.0f); // Create a new rotation based on the input
-
-    //Just to make sure the tank turns in the right direction
-    if(CurrentMoveInput <0 )
-    {
-        NewRotation = FRotator(0.0f, -DeltaRotation.Y, 0.0f); 
-
-    }
-    else
-    {    
-        NewRotation = FRotator(0.0f, DeltaRotation.Y, 0.0f); 
-    }
-    AddActorLocalRotation(NewRotation, true); // Apply rotation to the tank 
-
-}
-
