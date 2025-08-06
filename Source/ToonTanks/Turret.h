@@ -24,15 +24,16 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float FireRate = 2.5f;
 
-	float LastFireTime = 0.0f; // To track the last time the turret fired
+	class ATank* Tank; // Reference to the player tank
 
+    FTimerHandle FireRateTimerHandle;
 
-//	FTimerHandle FireRateTimerHandle;
+	void CheckFireCondition();
 
-	//void CheckFireCondition();
+	bool InFireRange();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void Tick(float DeltaTime) override;
-	
+	virtual void BeginPlay() override;
 };

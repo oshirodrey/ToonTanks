@@ -150,16 +150,7 @@ void ATank::Turn(float Value)
     FRotator NewRotation = FRotator(0.0f, 0.0f, 0.0f); // Create a new rotation based on the input
 
     //Just to make sure the tank turns in the right direction
-    if(CurrentMoveInput <0 )
-    {
-        NewRotation.Yaw =   -( Value * TurnRate * GetWorld()->GetDeltaSeconds()); // Turn left/right based on input  
-
-
-    }
-    else
-    {    
-        NewRotation.Yaw =   ( Value * TurnRate * GetWorld()->GetDeltaSeconds());
-    }
+    NewRotation.Yaw = (CurrentMoveInput <0? -1 : 1) * Value * TurnRate * GetWorld()->GetDeltaSeconds();
     AddActorLocalRotation(NewRotation, true); // Apply rotation to the tank 
 
 }
