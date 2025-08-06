@@ -22,7 +22,9 @@ private:
 	float RotationSpeed = 112.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
-	float FireRate = 1.0f;
+	float FireRate = 2.5f;
+
+	float LastFireTime = 0.0f; // To track the last time the turret fired
 
 
 //	FTimerHandle FireRateTimerHandle;

@@ -28,6 +28,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, meta= (AllowPrivateAccess = "true"),Category = "Components")
 	USceneComponent* ProjectileSpawnPoint;
+	
 
 
 public:	
@@ -35,5 +36,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 protected:
 	void RotateTurret(FVector LookAtTarget);
+	void Fire(); // Function to handle firing logic
 	UStaticMeshComponent* GetTurretMesh() const { return TurretMesh; } // Getter for turret mesh
 };

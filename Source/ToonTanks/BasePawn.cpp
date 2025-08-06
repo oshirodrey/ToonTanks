@@ -41,3 +41,9 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 	 	3.0f)
 	); // Smoothly rotate the turret towards the target
 }
+void ABasePawn::Fire()
+{
+	// Implement firing logic here, such as spawning a projectile
+	DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 50.f, 12, FColor::Green, false, 2.f);
+	// This function can be overridden in derived classes for specific firing behavior
+}

@@ -60,6 +60,9 @@ private:
 	void SetTankArrowsVisibility();
 	/////////
 	APlayerController* PlayerControllerRef;
+
+	
+
 public:
 	ATank(); // Decalration of the constructor
 	

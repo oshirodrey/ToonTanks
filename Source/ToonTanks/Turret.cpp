@@ -15,6 +15,13 @@ void ATurret::Tick(float DeltaTime)
     if (DistanceToTank <= FireRange)
     {
         RotateTurret(TankLocation);
+        // Optionally, you can implement firing logic here
+        if (GetWorld()->GetTimeSeconds() - LastFireTime >= FireRate)
+        {
+            LastFireTime = GetWorld()->GetTimeSeconds(); // Update the last fire time
+            Fire();
+        }
+
     }
     else
     {   ///If the tank is out of range rotate the turret around its own axis 

@@ -92,6 +92,8 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
     // You can bind other inputs like turning or firing here as well
     PlayerInputComponent->BindAxis("Turn", this, &ATank::Turn);
 
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ATank::Fire); // Bind the Fire action
+
     
     
 
