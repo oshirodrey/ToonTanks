@@ -35,5 +35,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 protected:
 	void RotateTurret(FVector LookAtTarget);
-	
+	UStaticMeshComponent* GetTurretMesh() const { return TurretMesh; } // Getter for turret mesh
 };
