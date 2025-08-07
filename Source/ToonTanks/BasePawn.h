@@ -32,12 +32,17 @@ private:
 	UPROPERTY(EditDefaultsOnly ,BlueprintReadWrite, meta= (AllowPrivateAccess = "true"),Category = "Combat")
 	TSubclassOf<class AProjectile> ProjectileClass; // Class of the projectile to spawn
 
-	 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float MaxHealth = 100.f; // Maximum health of the pawn
+	
 
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	float GetMaxHealth() const { return MaxHealth; } // Getter for maximum health
+
 protected:
 	void RotateTurret(FVector LookAtTarget);
 	void Fire(); // Function to handle firing logic

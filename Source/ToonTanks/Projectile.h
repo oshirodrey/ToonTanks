@@ -28,10 +28,10 @@ private:
 	class UProjectileMovementComponent* ProjectileMovement;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-	float Speed = 10.f; // Speed of the projectile
+	float Speed = 2000.f; // Speed of the projectile
 	
 	FTimerHandle FlyTimerHandle; // Timer handle for projectile movement
 
-
-	void Fly(); // Function to handle projectile movement
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };

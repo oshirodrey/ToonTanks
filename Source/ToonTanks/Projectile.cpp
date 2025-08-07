@@ -2,6 +2,7 @@
 
 #include "TimerManager.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
 
 // Sets default values
@@ -14,6 +15,7 @@ AProjectile::AProjectile()
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	ProjectileMovement->InitialSpeed = Speed;
+	ProjectileMovement->MaxSpeed = Speed;
 
 }
 
@@ -21,14 +23,23 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	GetWorld()->GetTimerManager().SetTimer(FlyTimerHandle, this, &AProjectile::Fly, 0.01f, true); // Set a timer to call Fly every 0.01 seconds
+	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 	
 }
 
-
-void AProjectile::Fly()
+void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	auto MyOwner = GetOwner();
+	if (MyOwner == nullptr || OtherActor == nullptr || OtherActor == MyOwner) return;
 
-//	AddActorLocalOffset(GetActorForwardVector() * Speed, true); // Move the projectile forward
-	// This could involve updating the position based on velocity, applying gravity, etc.
+	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
+	auto DamageType = UDamageType::StaticClass();
+	// Handle what happens when the projectile hits something
+	if (OtherActor && OtherActor != MyOwner && OtherActor != this)
+	{
+		
+		UGameplayStatics::ApplyDamage(OtherActor, 20.f, nullptr, this, nullptr); 
+	}
+	Destroy(); // Destroy the projectile after hitting
+
 }
