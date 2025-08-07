@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Components/CapsuleComponent.h"
+#include "Projectile.h"
 #include "BasePawn.h"
 
 // Sets default values
@@ -45,5 +46,12 @@ void ABasePawn::Fire()
 {
 	// Implement firing logic here, such as spawning a projectile
 	DrawDebugSphere(GetWorld(), ProjectileSpawnPoint->GetComponentLocation(), 50.f, 12, FColor::Green, false, 2.f);
-	// This function can be overridden in derived classes for specific firing behavior
+	if (ProjectileClass)
+	{
+		GetWorld()->SpawnActor<AProjectile>(ProjectileClass,
+			ProjectileSpawnPoint->GetComponentLocation(), 
+			ProjectileSpawnPoint->GetComponentRotation());
+	}
 }
+
+

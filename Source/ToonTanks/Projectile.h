@@ -20,15 +20,18 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Components")
 	class UStaticMeshComponent* ProjectileMesh;
 
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite, meta= (AllowPrivateAccess = "true"),Category = "Components")
+	class UProjectileMovementComponent* ProjectileMovement;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-	float Speed = 1000.f; // Speed of the projectile
+	float Speed = 10.f; // Speed of the projectile
+	
+	FTimerHandle FlyTimerHandle; // Timer handle for projectile movement
 
 
-	void Fly(float DeltaTime); // Function to handle projectile movement
+	void Fly(); // Function to handle projectile movement
 };

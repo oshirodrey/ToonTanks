@@ -1,15 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "TimerManager.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Projectile.h"
 
 // Sets default values
 AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 	RootComponent = ProjectileMesh;
+
+	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
+	ProjectileMovement->InitialSpeed = Speed;
 
 }
 
@@ -17,23 +21,14 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorld()->GetTimerManager().SetTimer(FlyTimerHandle, this, &AProjectile::Fly, 0.01f, true); // Set a timer to call Fly every 0.01 seconds
 	
 }
 
-// Called every frame
-void AProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	Fly(DeltaTime); // Call the Fly function to handle projectile movement
 
-}
-
-void AProjectile::Fly(float DeltaTime)
+void AProjectile::Fly()
 {
-	// Move forward in the direction the projectile is facing
-	FVector DeltaLocation = FVector::ZeroVector; // Initialize DeltaLocation
-	// Implement the logic for projectile movement here.
-	DeltaLocation = GetActorForwardVector() * Speed * DeltaTime; // Calculate the movement delta based on speed and delta time
-	AddActorLocalOffset(DeltaLocation, true); // Move the projectile forward
+
+//	AddActorLocalOffset(GetActorForwardVector() * Speed, true); // Move the projectile forward
 	// This could involve updating the position based on velocity, applying gravity, etc.
 }
