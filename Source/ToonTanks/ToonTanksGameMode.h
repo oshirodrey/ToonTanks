@@ -20,6 +20,9 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartGame();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void GameOver(bool bWonGame);
 private:
     class ATank* Tank; // Reference to the player tank
     class AToonTanksPlayerController* ToonTanksPlayerController;
@@ -28,4 +31,7 @@ private:
 
 	void HandleGameStart();
 
+	int32 TurretCount = 0;
+
+	int32 GetTurretCount();
 };
