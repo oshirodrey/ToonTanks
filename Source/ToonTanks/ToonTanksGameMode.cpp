@@ -8,6 +8,7 @@
 #include "ToonTanksGameMode.h"
 
 
+
 void AToonTanksGameMode::BeginPlay()
 {
     Super::BeginPlay();
@@ -20,11 +21,18 @@ void AToonTanksGameMode::HandleGameStart()
 {
     Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
     ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+
+    StartGame();
+    
+    if (!Tank || !ToonTanksPlayerController) return;
     ToonTanksPlayerController->SetPlayerEnableState(false); // Disable player input initially
     FTimerHandle PlayerEnableTimerHandle;
  // The TimerDelegate will (1) call the Object in a class create by user,(2) the function it will call and (3) the value it will pass un
     FTimerDelegate PLayerEnableTimerDelegate= FTimerDelegate::CreateUObject(ToonTanksPlayerController, &AToonTanksPlayerController::SetPlayerEnableState, true );
     GetWorldTimerManager().SetTimer(PlayerEnableTimerHandle, PLayerEnableTimerDelegate, StartDelay,false);
+    // Remove all widgets
+    
+    
 }
 
 void AToonTanksGameMode::ActorDied(AActor* DeadActor)
