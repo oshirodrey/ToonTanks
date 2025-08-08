@@ -55,5 +55,9 @@ void ABasePawn::Fire()
 		Projectile->SetOwner(GetOwner()); // Set the owner of the projectile to this pawn
 	}
 }
-
+void ABasePawn::HandleDestruction()
+{
+	//visual and audio effects for destruction
+	
+}
 

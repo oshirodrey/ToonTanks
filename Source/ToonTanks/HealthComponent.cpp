@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BasePawn.h"
+#include "ToonTanksGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "HealthComponent.h"
 
 // Sets default values for this component's properties
@@ -27,8 +29,10 @@ void UHealthComponent::BeginPlay()
 	{
 		MaxHealth = 100.f; // Fallback/default value
 	}	
-CurrentHealth = MaxHealth; // Initialize current health to maximum health
+	CurrentHealth = MaxHealth; // Initialize current health to maximum health
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::DamageTaken); // Bind the damage event
+
+	GameModeRef = Cast<AToonTanksGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	// ...
 	
@@ -50,6 +54,9 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	if (CurrentHealth <= 0.f)
 	{
 		// Handle death logic here, such as destroying the actor or triggering a death event
-		GetOwner()->Destroy(); // Example: destroy the owner actor
+		if (GameModeRef)
+		{
+			GameModeRef->ActorDied(DamagedActor); // Notify the game mode that the actor has died
+		}
 	}
 }

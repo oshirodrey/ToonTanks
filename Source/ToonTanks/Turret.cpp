@@ -61,3 +61,9 @@ bool ATurret::InFireRange()
     }
     return false; // If no tank is found, return false
 }
+
+void ATurret::HandleDestruction()
+{
+    Super::HandleDestruction();
+    Destroy(); // Call the base class destruction
+}

@@ -102,7 +102,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-    PlayerControllerRef = Cast<APlayerController>(GetController());
+    PlayerController = Cast<APlayerController>(GetController());
     
 	
 }
@@ -115,18 +115,16 @@ void ATank::Tick(float DeltaTime)
     // Call the function to set the visibility of the tank arrows
     SetTankArrowsVisibility();
     //Create a red sphere at the cursor's location 
-    if (PlayerControllerRef)
+    if (PlayerController)
     {
         FVector HitLocation;
         FHitResult HitResult;
-        PlayerControllerRef->GetHitResultUnderCursor(
+        PlayerController->GetHitResultUnderCursor(
             ECollisionChannel::ECC_Visibility, 
             false, 
             HitResult);
         HitLocation = HitResult.ImpactPoint;
 
-        // Draw a debug sphere at the hit location
-        DrawDebugSphere(GetWorld(), HitLocation, 50.f, 12, FColor::Red, false, -1.f);
         RotateTurret(HitLocation); // Rotate the turret towards the hit location
     }
 
@@ -204,4 +202,14 @@ void ATank::SetTankArrowsVisibility()
     // You can add more per-frame logic here
     CurrentMoveInput = 0.f;
     CurrentTurnInput = 0.f;
+}
+
+void ATank::HandleDestruction()
+{
+    Super::HandleDestruction();
+    // Implement tank-specific destruction logic here, such as playing effects or sounds
+    // For example, you might want to play an explosion effect or sound
+    // Destroy the tank actor after handling destruction
+    SetActorHiddenInGame(true); // Hide the tank actor
+    SetActorTickEnabled(false); // Disable ticking to stop updates
 }

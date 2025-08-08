@@ -43,6 +43,8 @@ public:
 
 	float GetMaxHealth() const { return MaxHealth; } // Getter for maximum health
 
+	void HandleDestruction(); // Function to handle destruction logic
+
 protected:
 	void RotateTurret(FVector LookAtTarget);
 	void Fire(); // Function to handle firing logic
