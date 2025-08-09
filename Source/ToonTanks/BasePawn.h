@@ -34,8 +34,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float MaxHealth = 100.f; // Maximum health of the pawn
-	
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	class UParticleSystem* DeathParticle;
+	
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	class USoundBase* DeathSound;
 
 public:	
 	// Called every frame

@@ -4,7 +4,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
-
+#include "Particles/ParticleSystemComponent.h"
 // Sets default values
 AProjectile::AProjectile()
 {
@@ -17,6 +17,10 @@ AProjectile::AProjectile()
 	ProjectileMovement->InitialSpeed = Speed;
 	ProjectileMovement->MaxSpeed = Speed;
 
+	SmokeTrailParticle= CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail"));
+	SmokeTrailParticle->SetupAttachment(ProjectileMesh);
+
+
 }
 
 // Called when the game starts or when spawned
@@ -24,22 +28,30 @@ void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+
+	UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation());
+	
 	
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	auto MyOwner = GetOwner();
-	if (MyOwner == nullptr || OtherActor == nullptr || OtherActor == MyOwner) return;
-
+	if (MyOwner == nullptr || OtherActor == nullptr || OtherActor == MyOwner)
+	{
+		Destroy();
+		return;
+	}
 	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
 	auto DamageType = UDamageType::StaticClass();
 	// Handle what happens when the projectile hits something
 	if (OtherActor && OtherActor != MyOwner && OtherActor != this)
 	{
 		
-		UGameplayStatics::ApplyDamage(OtherActor, 20.f, nullptr, this, nullptr); 
+		UGameplayStatics::ApplyDamage(OtherActor, 20.f, MyOwnerInstigator, this, DamageType); 
 	}
+	if (HitParticle) UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, Hit.ImpactPoint, FRotator(0.f, 0.f, 0.f));
+	if (HitSound) UGameplayStatics::PlaySoundAtLocation(this, HitSound, Hit.ImpactPoint);
 	Destroy(); // Destroy the projectile after hitting
 
 }
