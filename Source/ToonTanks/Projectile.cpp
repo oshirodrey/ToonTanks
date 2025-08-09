@@ -36,14 +36,14 @@ void AProjectile::BeginPlay()
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	auto MyOwner = GetOwner();
+	AActor* MyOwner = GetOwner();
 	if (MyOwner == nullptr || OtherActor == nullptr || OtherActor == MyOwner)
 	{
 		Destroy();
 		return;
 	}
-	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
-	auto DamageType = UDamageType::StaticClass();
+	AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
+	UClass* DamageType = UDamageType::StaticClass();
 	// Handle what happens when the projectile hits something
 	if (OtherActor && OtherActor != MyOwner && OtherActor != this)
 	{
@@ -52,6 +52,10 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	}
 	if (HitParticle) UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, Hit.ImpactPoint, FRotator(0.f, 0.f, 0.f));
 	if (HitSound) UGameplayStatics::PlaySoundAtLocation(this, HitSound, Hit.ImpactPoint);
+	if (HitCameraShakeClass)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
+	}
 	Destroy(); // Destroy the projectile after hitting
 
 }

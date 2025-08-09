@@ -74,4 +74,6 @@ public:
 	void HandleDestruction(); // Override to handle tank-specific destruction logic
 
 	APlayerController* GetPlayerController() const { return PlayerController; } // Getter for player controller
+
+	bool bStillAlive = true; // Flag to check if the tank is still alive
 };

@@ -212,4 +212,5 @@ void ATank::HandleDestruction()
     // Destroy the tank actor after handling destruction
     SetActorHiddenInGame(true); // Hide the tank actor
     SetActorTickEnabled(false); // Disable ticking to stop updates
+    bStillAlive = false; // Set the flag to indicate that the tank is dead
 }

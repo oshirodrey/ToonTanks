@@ -44,7 +44,7 @@ void ATurret::CheckFireCondition()
     if (Tank)
     {   
         float DistanceToTank = FVector::Distance(Tank->GetActorLocation(), GetActorLocation());
-        if (InFireRange())
+        if (InFireRange() && Tank->bStillAlive)
         {
             Fire(); // Call the Fire function if the tank is within range
         }
